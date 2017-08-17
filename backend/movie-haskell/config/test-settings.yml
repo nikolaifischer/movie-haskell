@@ -1,0 +1,4 @@
+database:
+  database: movie-haskell_test
+
+auth-dummy-login: true

@@ -1,0 +1,11 @@
+<div .ui.container>
+  <h1> #{movieTitle themovie}
+
+
+  <div>
+    <img src="#{List.last (moviePosterURLs theconfig themovie)}">
+    <div>#{movieOverview themovie}
+    <h4> Runtime
+    <div> #{movieRunTime themovie} min
+    <h4> Release Date
+    <div> #{findRelease themovie}

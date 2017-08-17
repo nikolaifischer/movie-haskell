@@ -1,0 +1,16 @@
+<div .ui.container>
+
+
+
+    <form method=post action=@{ProfileR} enctype=#{enctype}>
+      ^{widget}
+      <button class="btn btn-default">Search
+
+    <h1>
+      Your Recommendations
+
+
+
+
+    <p>
+      Welcome <strong><span class="username">#{show userName}</span></strong>!
