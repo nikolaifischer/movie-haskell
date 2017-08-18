@@ -71,3 +71,7 @@
 #message {
     margin-bottom: 40px;
 }
+
+.search-result-img {
+  max-width: 150px;
+}

@@ -12,4 +12,4 @@
 
 /results/#Text ResultR GET
 
-/details/#Int DetailsR GET
+/details/#Int DetailsR GET POST

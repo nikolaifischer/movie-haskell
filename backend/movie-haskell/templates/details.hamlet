@@ -2,6 +2,13 @@
   <h1> #{movieTitle themovie}
 
 
+  $maybe msg <- mmsg
+    <div #message>#{msg}
+
+  <form method=post action=@{DetailsR (movieID themovie)} enctype=#{enctype}>
+    ^{widget}
+    <button class="btn btn-default">Recommend
+
   <div>
     <img src="#{List.last (moviePosterURLs theconfig themovie)}">
     <div>#{movieOverview themovie}

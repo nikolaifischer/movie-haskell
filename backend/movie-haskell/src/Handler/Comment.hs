@@ -12,10 +12,10 @@ postCommentR = do
     maybeCurrentUserId <- maybeAuthId
     let comment' = comment { commentUserId = maybeCurrentUserId}
     -- TEST CODE START
-    let movie = Movie (pack "1234") False
-    theid <- runDB $ insertEntity movie
-    movies <- runDB $ selectList [MovieWatched ==. True] []
-    liftIO $ Import.print movies
+    --let movie = Movie (pack "1234") False
+    --theid <- runDB $ insertEntity movie
+    --movies <- runDB $ selectList [MovieWatched ==. True] []
+    --liftIO $ Import.print movies
     -- TEST CODE STOP
 
     insertedComment <- runDB $ insertEntity comment'

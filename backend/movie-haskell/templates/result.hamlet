@@ -1,9 +1,15 @@
 <div .ui.container>
   <h1> You searched for #{show query}
 
-  <ul>
+
+  <ul .list-group>
     $forall entry <- list
-        <div>
-          <a href=@{DetailsR $ movieID entry}>
-            <h3>#{movieTitle entry}
-            <img src="#{(moviePosterURLs theconfig entry) !! 3}">
+        <li .list-group-item>
+          <div .media>
+            <div .media-left>
+              <a href=@{DetailsR $ movieID entry}>
+                <img .search-result-img .media-object src="#{(moviePosterURLs theconfig entry) !! 3}">
+            <div .media-body>
+              <a href=@{DetailsR $ movieID entry}>
+                <h3 .media-heading>#{movieTitle entry}
+              <p> #{movieOverview entry}
