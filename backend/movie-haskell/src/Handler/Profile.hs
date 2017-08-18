@@ -12,6 +12,8 @@ import           Yesod.Auth.GoogleEmail2
 import           Yesod.Form.Bootstrap3
 
 
+----------------- GENERATING FORMS ------
+
 -- This datatype serves no other purpose than wrapping a search-query
 -- in the searchForm
 data SearchQuery = SearchQuery
@@ -24,6 +26,9 @@ searchForm = SearchQuery
             <$> areq textField (bfs ("Search for a Movie" :: Text))  Nothing
 
 
+
+
+----------- HTTP HANDLERS ----------------------
 getProfileR :: Handler Html
 getProfileR = do
     token <- getUserAccessToken
@@ -41,11 +46,11 @@ getProfileR = do
     maid <- maybeAuthId
     let Just(usid) = maid
     --- TEST CODE: Relation zwischen Movie und aktuellem User --
-    someMovie <- runDB $ selectFirst [MovieTmdbId ==. "1234"] []
-    let Just(justSomeMovie) = someMovie
-    back <- runDB $  insert $ Movie_User usid (entityKey justSomeMovie)
+    --someMovie <- runDB $ selectFirst [MovieTmdbId ==. "1234"] []
+    --let Just(justSomeMovie) = someMovie
+    --back <- runDB $  insert $ Movie_User usid (entityKey justSomeMovie)
     -- TMDB-Ids for this user's recommendation are now stored here
-    movieIds <-  runDB $ selectList [Movie_UserUserId ==. usid] []
+    --movieIds <-  runDB $ selectList [Movie_UserUserId ==. usid] []
     -- END TEST CODE --
 
 
@@ -69,8 +74,11 @@ postProfileR = do
       FormSuccess theQuery -> do
               print theQuery
               redirect $ ResultR (query theQuery)
-      _ -> error "Error while searching"
+      _ -> redirect $ HomeR
 
+
+
+------------- HELPER FUNCTIONS ------------------
 
 -- | Search for movies with a query string.
 searchAndListMovies :: Text -> TheMovieDB [TMDB.Movie]
@@ -78,18 +86,8 @@ searchAndListMovies query = do
   movies <- searchMovies query
   return movies
 
-  --liftIO $ mapM_ printMovieHeader movies
 
-printMovieHeader :: TMDB.Movie -> IO ()
-printMovieHeader m =
-  --Import.print (movieTitle m)
-  Import.print ("TEST")
-  --printf "%8d: %s (%s)\n" (movieID m) (unpack $ movieTitle m) year
-  --where year = case movieReleaseDate m of
-                 --Just d  -> formatTime defaultTimeLocale "%Y" d
-                 --Nothing -> "----"
-
---getRecommendations :: UserId ->IO ()
---getRecommendations usid = do
---    movieIds <- liftIO $ runDB $ selectList [Movie_UserUserId ==. usid] []
---    Import.print "Test"
+  --getRecommendations :: UserId ->IO ()
+  --getRecommendations usid = do
+  --    movieIds <- liftIO $ runDB $ selectList [Movie_UserUserId ==. usid] []
+  --    Import.print "Test"

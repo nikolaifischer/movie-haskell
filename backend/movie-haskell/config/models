@@ -17,6 +17,7 @@ Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived
 Movie
   tmdbId Text
   watched Bool
+  recommended_by Text
   deriving Show
 
 Movie_User

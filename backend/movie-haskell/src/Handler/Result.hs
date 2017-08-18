@@ -31,9 +31,9 @@ getResultR query = do
     maid <- maybeAuthId
     let Just(usid) = maid
     --- TEST CODE: Relation zwischen Movie und aktuellem User --
-    someMovie <- runDB $ selectFirst [MovieTmdbId ==. "1234"] []
-    let Just(justSomeMovie) = someMovie
-    back <- runDB $  Import.insert $ Movie_User usid (entityKey justSomeMovie)
+    --someMovie <- runDB $ selectFirst [MovieTmdbId ==. "1234"] []
+    --let Just(justSomeMovie) = someMovie
+    --back <- runDB $  Import.insert $ Movie_User usid (entityKey justSomeMovie)
     -- END TEST CODE --
     movieIds <-  runDB $ selectList [Movie_UserUserId ==. usid] []
     print "The Movies"
