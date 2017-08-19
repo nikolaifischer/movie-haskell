@@ -10,6 +10,8 @@ import           Network.API.TheMovieDB  as TMDB
 import           Text.Printf             (printf)
 import           Yesod.Auth.GoogleEmail2
 import           Yesod.Form.Bootstrap3
+import           Text.Read
+import Data.List as List
 
 
 ----------------- GENERATING FORMS ------
@@ -50,9 +52,33 @@ getProfileR = do
     --let Just(justSomeMovie) = someMovie
     --back <- runDB $  insert $ Movie_User usid (entityKey justSomeMovie)
     -- TMDB-Ids for this user's recommendation are now stored here
-    --movieIds <-  runDB $ selectList [Movie_UserUserId ==. usid] []
+    movieRelationEntities <-  runDB $ selectList [Movie_UserUserId ==. usid] []
+
     -- END TEST CODE --
 
+    -- List Comprehension to extract the IDs from the collected Movie_Entites
+    let reccMovieIds = [movie_UserMovieId x | Entity someId x <- movieRelationEntities]
+
+    -- Fetch the Movie Entities for the extracted IDs
+    reccMovies <- runDB $ selectList [MovieId <-. reccMovieIds ] []
+
+    -- Match the Database Movie Objects up with TMDB Objects to present
+    -- further information (TODO)
+    -- read $ Data.Text.unpack fortyTwo :: Int
+
+    --mapM :: Monad m => (a -> m b) -> t a -> m (t b)
+    test <- liftIO $ return $ mapM toTMDBMovie reccMovies
+
+
+    --let tmdbMovies1 = [liftIO ( toTMDBMovie currentEnt) :: TMDB.Movie | Entity _ currentEnt <-  reccMovies]
+
+
+
+
+
+    -- Load TMDB Config to construct Image-URLS:
+    eitherConfig <- liftIO $ runTheMovieDB key config
+    let Right(theconfig) = eitherConfig
 
 
     -- Render the Search Form
@@ -79,6 +105,37 @@ postProfileR = do
 
 
 ------------- HELPER FUNCTIONS ------------------
+
+-- Kompiliert:
+toTMDBMovie :: Entity Import.Movie -> IO TMDB.Movie
+toTMDBMovie x = do
+          let (Entity _ currentEnt) = x
+          let intID =  read (unpack (movieTmdbId currentEnt)) :: Int
+          movie <- runTheMovieDB key (fetchMovie intID)
+          let Right bla = movie
+          return bla
+
+
+--mapM :: Monad m => (a -> m b) -> t a -> m (t b)
+
+
+
+
+--- Couldn't match expected type `TMDB.Movie' with actual type `IO ()'
+--toTMDBMovie :: Import.Movie -> IO()
+--toTMDBMovie currentEnt = do
+--          let intID =  read (unpack (movieTmdbId currentEnt)) :: Int
+--          movie <- runTheMovieDB key (fetchMovie intID)
+--          let Right bla = movie
+--          bla
+
+--toTMDBMovie currentEnt =
+--          let
+--                intID =  read (unpack (movieTmdbId currentEnt)) :: Int
+--                movie = liftIO $ runTheMovieDB key (fetchMovie intID)
+--          in movie
+
+
 
 -- | Search for movies with a query string.
 searchAndListMovies :: Text -> TheMovieDB [TMDB.Movie]
