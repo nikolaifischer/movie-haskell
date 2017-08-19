@@ -12,5 +12,7 @@
 
 
 
+
+
     <p>
       Welcome <strong><span class="username">#{show userName}</span></strong>!
