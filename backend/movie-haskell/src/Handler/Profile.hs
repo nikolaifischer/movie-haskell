@@ -12,6 +12,7 @@ import           Yesod.Auth.GoogleEmail2
 import           Yesod.Form.Bootstrap3
 import           Text.Read
 import Data.List as List
+import           System.IO.Unsafe
 
 
 ----------------- GENERATING FORMS ------
@@ -67,7 +68,8 @@ getProfileR = do
     -- read $ Data.Text.unpack fortyTwo :: Int
 
     --mapM :: Monad m => (a -> m b) -> t a -> m (t b)
-    test <- liftIO $ return $ mapM toTMDBMovie reccMovies
+    -- TODO: Do not use unsafe...
+    let test = unsafePerformIO $ mapM toTMDBMovie reccMovies
 
 
     --let tmdbMovies1 = [liftIO ( toTMDBMovie currentEnt) :: TMDB.Movie | Entity _ currentEnt <-  reccMovies]

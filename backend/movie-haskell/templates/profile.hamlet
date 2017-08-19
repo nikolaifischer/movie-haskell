@@ -9,7 +9,17 @@
     <h1>
       Your Recommendations
 
-
+    <ul .list-group>
+      $forall entry <- test
+          <li .list-group-item>
+            <div .media>
+              <div .media-left>
+                <a href=@{DetailsR $ movieID entry}>
+                  <img .search-result-img .media-object src="#{(moviePosterURLs theconfig entry) !! 3}">
+              <div .media-body>
+                <a href=@{DetailsR $ movieID entry}>
+                  <h3 .media-heading>#{movieTitle entry}
+                <p> #{movieOverview entry}
 
 
 
