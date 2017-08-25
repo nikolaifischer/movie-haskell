@@ -1,6 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE QuasiQuotes           #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE ViewPatterns #-}
@@ -23,7 +24,6 @@ import qualified Data.Text.Encoding as TE
 
 -- Google Authentication --
 import           Yesod.Auth
-import           Yesod.Auth.BrowserId
 import           Yesod.Auth.GoogleEmail2
 clientId :: Text
 clientId = "***REMOVED***"
@@ -115,7 +115,7 @@ instance Yesod App where
                 [ NavbarLeft $ MenuItem
                     { menuItemLabel = "Home"
                     , menuItemRoute = HomeR
-                    , menuItemAccessCallback = True
+                    , menuItemAccessCallback = isNothing muser
                     }
                 , NavbarLeft $ MenuItem
                     { menuItemLabel = "Profile"
@@ -216,15 +216,21 @@ instance YesodPersist App where
             action
             (appConnPool master)
 
+
+login :: Widget
+login = do
+    master <- getYesod
+    toWidget $(widgetFile "login")
 instance YesodAuth App where
     type AuthId App = UserId
 
+
     -- Where to send a user after successful login
-    loginDest _ = HomeR
+    loginDest _ = ProfileR
     -- Where to send a user after logout
     logoutDest _ = HomeR
     -- Override the above two destinations when a Referer: header is present
-    redirectToReferer _ = True
+    redirectToReferer _ = False
 
     authenticate creds = runDB $ do
         x <- getBy $ UniqueUser $ credsIdent creds
@@ -239,6 +245,7 @@ instance YesodAuth App where
     -- SaveToken is important to access User Information, such as name etc.
     authPlugins app = [authGoogleEmailSaveToken clientId clientSecret]
 
+    loginHandler = lift $ defaultLayout $ [whamlet|<div style="width:500px;margin:0 auto; text-align: center; min-height:900px">^{login}|]
 
     authHttpManager = getHttpManager
 
