@@ -7,12 +7,12 @@ module Handler.Profile where
 
 import           Import
 import           Network.API.TheMovieDB  as TMDB
-import           Text.Printf             (printf)
 import           Yesod.Auth.GoogleEmail2
 import           Yesod.Form.Bootstrap3
 import           Text.Read
 import Data.List as List
 import           System.IO.Unsafe
+import Data.Map as Maps
 
 
 ----------------- GENERATING FORMS ------
@@ -27,8 +27,6 @@ data SearchQuery = SearchQuery
 searchForm :: AForm Handler SearchQuery
 searchForm = SearchQuery
             <$> areq textField (bfs ("Search for a Movie" :: Text))  Nothing
-
-
 
 
 ----------- HTTP HANDLERS ----------------------
@@ -48,34 +46,22 @@ getProfileR = do
     -- GET RECOMMONDATIONS FROM DB
     maid <- maybeAuthId
     let Just(usid) = maid
-    --- TEST CODE: Relation zwischen Movie und aktuellem User --
-    --someMovie <- runDB $ selectFirst [MovieTmdbId ==. "1234"] []
-    --let Just(justSomeMovie) = someMovie
-    --back <- runDB $  insert $ Movie_User usid (entityKey justSomeMovie)
+
     -- TMDB-Ids for this user's recommendation are now stored here
     movieRelationEntities <-  runDB $ selectList [Movie_UserUserId ==. usid] []
-
-    -- END TEST CODE --
 
     -- List Comprehension to extract the IDs from the collected Movie_Entites
     let reccMovieIds = [movie_UserMovieId x | Entity someId x <- movieRelationEntities]
 
     -- Fetch the Movie Entities for the extracted IDs
-    reccMovies <- runDB $ selectList [MovieId <-. reccMovieIds ] []
+    moviesFromDB <- runDB $ selectList [MovieId <-. reccMovieIds, MovieWatched ==. False ] []
 
-    -- Match the Database Movie Objects up with TMDB Objects to present
-    -- further information (TODO)
-    -- read $ Data.Text.unpack fortyTwo :: Int
-
-    --mapM :: Monad m => (a -> m b) -> t a -> m (t b)
-    -- TODO: Do not use unsafe...
-    let test = unsafePerformIO $ mapM toTMDBMovie reccMovies
+    -- Fetch TMDB Objects corresponding to the Movie Entities
+    recommended_movies <- liftIO $ mapM toTMDBMovie moviesFromDB
 
 
-    --let tmdbMovies1 = [liftIO ( toTMDBMovie currentEnt) :: TMDB.Movie | Entity _ currentEnt <-  reccMovies]
-
-
-
+    let tupelList = [ (i,j) |  i <- recommended_movies , Entity _ j <- moviesFromDB] :: [ (TMDB.Movie , Import.Movie)]
+    let movieDict = Maps.fromList tupelList -- :: Map TMDB.Movie Import.Movie
 
 
     -- Load TMDB Config to construct Image-URLS:
@@ -108,35 +94,18 @@ postProfileR = do
 
 ------------- HELPER FUNCTIONS ------------------
 
--- Kompiliert:
+
+-- Maps a Movie Entity from the local Database to a Movie Entity in the TMDB API Wrapper  :
 toTMDBMovie :: Entity Import.Movie -> IO TMDB.Movie
 toTMDBMovie x = do
           let (Entity _ currentEnt) = x
           let intID =  read (unpack (movieTmdbId currentEnt)) :: Int
           movie <- runTheMovieDB key (fetchMovie intID)
-          let Right bla = movie
-          return bla
-
-
---mapM :: Monad m => (a -> m b) -> t a -> m (t b)
-
-
-
-
---- Couldn't match expected type `TMDB.Movie' with actual type `IO ()'
---toTMDBMovie :: Import.Movie -> IO()
---toTMDBMovie currentEnt = do
---          let intID =  read (unpack (movieTmdbId currentEnt)) :: Int
---          movie <- runTheMovieDB key (fetchMovie intID)
---          let Right bla = movie
---          bla
-
---toTMDBMovie currentEnt =
---          let
---                intID =  read (unpack (movieTmdbId currentEnt)) :: Int
---                movie = liftIO $ runTheMovieDB key (fetchMovie intID)
---          in movie
-
+          let val = case movie of
+                      Left _ -> error "Error while mapping the Movie"
+                      Right smth -> smth
+          --let Right val = movie
+          return val
 
 
 -- | Search for movies with a query string.
@@ -146,7 +115,6 @@ searchAndListMovies query = do
   return movies
 
 
-  --getRecommendations :: UserId ->IO ()
-  --getRecommendations usid = do
-  --    movieIds <- liftIO $ runDB $ selectList [Movie_UserUserId ==. usid] []
-  --    Import.print "Test"
+
+instance Ord TMDB.Movie where
+  movie1 `compare` movie2 = (movieID movie1) `compare` (movieID movie2)

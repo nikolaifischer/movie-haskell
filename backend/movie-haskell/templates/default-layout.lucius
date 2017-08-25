@@ -1,6 +1,9 @@
-.masthead,
 .navbar {
     background-color: rgb(27, 28, 29);
+}
+
+.masthead {
+  background-image: url("../img/cinema.jpg");
 }
 
 .navbar-default .navbar-nav > .active > a {
@@ -16,7 +19,7 @@
     margin-top: -21px;
     color: white;
     text-align: center;
-    min-height: 500px;
+    min-height: 1000px;
 }
 
 .masthead .header {
@@ -26,7 +29,7 @@
 }
 
 .masthead h1.header {
-    margin-top: 1em;
+    margin-top: 3em;
     margin-bottom: 0em;
     font-size: 4.5em;
     line-height: 1.2em;
@@ -74,4 +77,16 @@
 
 .search-result-img {
   max-width: 150px;
+}
+
+.mainAppContainer {
+  min-height: 900px;
+}
+
+.recoHeader{
+  margin-bottom: 30px;
+}
+
+.recommend-img{
+  max-width: 300px;
 }

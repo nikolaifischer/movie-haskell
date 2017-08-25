@@ -2,26 +2,40 @@
     <div .container>
         <div .row>
             <h1 .header>
-                Yesod—a modern framework for blazing fast websites
+                Watch That!
             <h2>
-                Fast, stable & spiced with great community
-            <a href="http://www.yesodweb.com/book/" .btn.btn-info.btn-lg>
-                Read the Book
+                Recommend movies to your friends and know what to watch
+                next.
+            <a href="http://www.yesodweb.com/book/" .btn.cfa-button.btn-lg.btn-default>
+                Sign up
 
 <div .container>
     <!-- Starting
         ================================================== -->
-    <div .bs-docs-section>
+    <div>
         <div .row>
             <div .col-lg-12>
                 <div .page-header>
-                    <h1 #start>Starting
+                    <h1 #start>What is "Watch That!"?
 
                     <p>
-                        Now that you have a working project you should use the
-                        <a href=http://www.yesodweb.com/book/>Yesod book</a> to learn more.
+                        "Watch That!" is a online platform designed to help you
+                        keep track of your movie recommendations.
                     <p>
-                        You can also use this scaffolded site to explore some concepts, and best practices.
+                        Don't you have that one friend which always recommends movies that you might like,
+                        but you never get around to watching them. "Watch That!" helps you remember which friend
+                        recommended which movie to you.
+
+                    <h1>How does it work?
+                    <p>
+                      To recommend a movie to a friend (who is also registered) all you have to know is his or her E-Mail Address.
+                      You can search for any movie and than send an recommendation to your friend.
+
+                    <p>
+                      The movies your friends recommend to you are displayed in your account.
+                      Anytime you want to watch a good movie but don't know which, you can open up
+                      "Watch That!" and get inspired by your friends' recommendations.
+
 
                     <ul .list-group>
 
