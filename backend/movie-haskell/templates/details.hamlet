@@ -9,6 +9,9 @@
     ^{widget}
     <button class="btn btn-default">Recommend
 
+  <form method=post action=@{DetailsR (movieID themovie)}>
+     <button type=submit name=watchedFlag value=yes>Watched
+
   <div>
     <img src="#{List.last (moviePosterURLs theconfig themovie)}">
     <div>#{movieOverview themovie}
