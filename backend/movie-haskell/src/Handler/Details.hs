@@ -79,9 +79,9 @@ getDetailsR theID = do
 postDetailsR :: ItemID -> Handler Html
 postDetailsR tmdbident = do
   ((res, widget), enctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm recommendationForm
+  watchedButtonPressed <- runInputPost $ iopt boolField "watchedFlag"
   case res of
     FormSuccess userQuery -> do
-
           -- Get the User to whom this movie should be recommended:
             let mail = email userQuery
             maybeUser <-  runDB $ selectFirst [UserIdent ==. mail] []
@@ -109,10 +109,20 @@ postDetailsR tmdbident = do
             entId <- runDB $ Import.insert entity
 
             setMessage $ toHtml $ successMessage
+            print "watched Button False"
+            print watchedButtonPressed
             redirect $ DetailsR tmdbident
-    _ ->    do
-              setMessage $ toHtml errorMessage
+
+    _ ->  case watchedButtonPressed of
+            Just True -> do
+
               redirect $ DetailsR tmdbident
+
+            _ -> do
+
+                print "FAIL Fail"
+                setMessage $ toHtml errorMessage
+                redirect $ DetailsR tmdbident
 
 
 -- | Search for movies with a query string.
