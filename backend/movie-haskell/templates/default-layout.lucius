@@ -89,4 +89,9 @@
 
 .recommend-img{
   max-width: 300px;
+  margin: auto;
+}
+
+.buttonText{
+  margin-left: 10px;
 }
