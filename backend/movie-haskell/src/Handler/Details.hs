@@ -21,6 +21,9 @@ successMessage = "Your Recommendation was saved!"
 errorMessage :: Text
 errorMessage = "Could not find a User with this E-Mail Address"
 
+badErrorMessage :: Text
+badErrorMessage = "Oops, you found an error. Please reload the page and try again!"
+
 ----------------- GENERATING FORMS ------
 
 -- This datatype serves no other purpose than wrapping a reccomendation-query
@@ -113,15 +116,31 @@ postDetailsR tmdbident = do
             print watchedButtonPressed
             redirect $ DetailsR tmdbident
 
+  -- The User did not use the recommendationForm.
+  -- Check if the "watched" Button was pressed
     _ ->  case watchedButtonPressed of
             Just True -> do
+              -- Watched Button was pressed
+              -- Set the watched flag in the DB:
 
-              redirect $ DetailsR tmdbident
+              --  Identify the current user
+              maid <- maybeAuthId
+              let Just loggedInId = maid
 
+              -- Get the movies belonging to this user
+              movieIdsTmp <- runDB $ selectList [Movie_UserUserId ==. loggedInId] []
+              let movieIds = [movie_UserMovieId x | Entity someId x <- movieIdsTmp]
+
+              -- Identify the Movies corresponding to the ID of this detail page
+              let tmdbidentText = pack $ show tmdbident
+              -- Set the watched flag for all of these movies to "True"
+              _ <- runDB $ updateWhere [MovieTmdbId ==. tmdbidentText, MovieId <-. movieIds] [MovieWatched =. True]
+
+              redirect $ ProfileR
+
+          -- Both Forms failed. There is something wrong here!
             _ -> do
-
-                print "FAIL Fail"
-                setMessage $ toHtml errorMessage
+                setMessage $ toHtml badErrorMessage
                 redirect $ DetailsR tmdbident
 
 

@@ -2,18 +2,24 @@
 
 
 
-    <form method=post action=@{ProfileR} enctype=#{enctype}>
-      ^{widget}
-      <button class="btn btn-default">Search
+  <div .row>
+    <div .col-xs-12>
+      <form method=post action=@{ProfileR} enctype=#{enctype}>
+        ^{widget}
+        <button class="btn btn-default">
+          <span class="glyphicon glyphicon-search">
+          <span .buttonText stlye="float:right;"> Search
 
-    <h1 .recoHeader>
-      Your Recommendations
+  <div .row>
+    <div .col-xs-12>
+      <h1 .recoHeader>
+        Your Recommendations
 
-    <div .row>
-      $forall entry <- recommended_movies
-        <div .col-sm-4 style="padding-bottom: 10px;">
-          <a href=@{DetailsR $ movieID entry}>
-            <img .recommend-img .media-object src="#{(moviePosterURLs theconfig entry) !! 3}">
+  <div .row>
+    $forall entry <- recommended_movies
+      <div .col-xs-12 .col-md-4 style="padding-bottom: 10px;">
+        <a href=@{DetailsR $ movieID entry}>
+          <img .recommend-img .media-object src="#{(moviePosterURLs theconfig entry) !! 3}">
 
 
 
