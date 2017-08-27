@@ -68,11 +68,27 @@ getDetailsR theID = do
 
 
 
-    mmsg <- getMessage
+    mmsg <- getMessage -- Brauch ich das überhaupt noch?
+
+    -- Checks if the movie for this details page was
+    -- recommended to the current User
+    -- If it was, a "Mark as Watched" button is displayed
+    --------------------------------------
+    -- Identify all Movie Objects corresponding to the current TMDB ID
+    movieEntities <- runDB $ selectList [MovieTmdbId ==. (pack $ show theID)] []
+    let movieIds = [someId | Entity someId _ <- movieEntities]
+
+    -- Check if there is an Entry for the User ID and one of the Movie Objects
+    -- in the Movie - User DB Table.
+    hits <- runDB $ selectList [Movie_UserMovieId <-. movieIds, Movie_UserUserId ==. usid] []
+    -- Set the Flag accordingly
+    let isRecommended = (List.length hits) > 0
+    ----------------------------------------
 
 
+
+    -- Render Form and Page
     (widget, enctype) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm recommendationForm
-
     defaultLayout $ do
         setTitle "Details"
         $(widgetFile "details")
