@@ -95,3 +95,7 @@
 .buttonText{
   margin-left: 10px;
 }
+
+.detailsImage{
+  max-width: 400px;
+}
