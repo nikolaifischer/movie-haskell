@@ -24,9 +24,10 @@ ip-from-header: "_env:IP_FROM_HEADER:false"
 # See https://github.com/yesodweb/yesod/wiki/Configuration#parsing-numeric-values-as-strings
 
 database:
-  user:        "movie-haskell"
-  password:    "movie-haskell"
-  host:        "localhost"
+  user:        "admin"
+  password:    "movie-haskell-demo"
+  host:        "ds161793.mlab.com"
+  port:        61793
   # See config/test-settings.yml for an override during tests
   database:    "movie-haskell"
   connections: 10
