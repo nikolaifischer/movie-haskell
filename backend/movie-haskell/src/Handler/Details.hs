@@ -52,18 +52,18 @@ getDetailsR theID = do
 
 
     maid <- maybeAuthId
-    let Just(usid) = maid
+    let Just usid = maid
 
 
 
     -- Load TMDB Config to construct Image-URLS:
     eitherConfig <- liftIO $ runTheMovieDB key config
-    let Right(theconfig) = eitherConfig
+    let Right theconfig = eitherConfig
 
     result <- liftIO $ runTheMovieDB key (fetchMovie theID)
 
     let themovie = case result of
-                Left err        -> error "Movie not found in DB"
+                Left _        -> error "Movie not found in DB"
                 Right something -> something
 
 
@@ -75,8 +75,9 @@ getDetailsR theID = do
     -- If it was, a "Mark as Watched" button is displayed
     --------------------------------------
     -- Identify all Movie Objects corresponding to the current TMDB ID
-    movieEntities <- runDB $ selectList [MovieTmdbId ==. (pack $ show theID)] []
+    movieEntities <- runDB $ selectList [MovieTmdbId ==. (pack $ show theID), MovieWatched ==. False] []
     let movieIds = [someId | Entity someId _ <- movieEntities]
+    let movieobjs = [obj | Entity _ obj <- movieEntities]
 
     -- Check if there is an Entry for the User ID and one of the Movie Objects
     -- in the Movie - User DB Table.
@@ -97,7 +98,7 @@ getDetailsR theID = do
 
 postDetailsR :: ItemID -> Handler Html
 postDetailsR tmdbident = do
-  ((res, widget), enctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm recommendationForm
+  ((res, _), _) <- runFormPost $ renderBootstrap3 BootstrapBasicForm recommendationForm
   watchedButtonPressed <- runInputPost $ iopt boolField "watchedFlag"
   case res of
     FormSuccess userQuery -> do
@@ -106,7 +107,7 @@ postDetailsR tmdbident = do
             maybeUser <-  runDB $ selectFirst [UserIdent ==. mail] []
             let user =  case maybeUser of
                         Nothing -> error "Something went wrong with the Input Validation"
-                        Just (Entity theid therest) -> theid
+                        Just (Entity theid _) -> theid
 
           -- Get the logged in User
 
@@ -125,10 +126,10 @@ postDetailsR tmdbident = do
             themovieId <-  runDB $ Import.insert $ Import.Movie (pack (show tmdbident)) False userName
 
             let entity = Movie_User user themovieId
-            entId <- runDB $ Import.insert entity
+            _ <- runDB $ Import.insert entity
 
             setMessage $ toHtml $ successMessage
-            print "watched Button False"
+
             print watchedButtonPressed
             redirect $ DetailsR tmdbident
 
@@ -145,7 +146,7 @@ postDetailsR tmdbident = do
 
               -- Get the movies belonging to this user
               movieIdsTmp <- runDB $ selectList [Movie_UserUserId ==. loggedInId] []
-              let movieIds = [movie_UserMovieId x | Entity someId x <- movieIdsTmp]
+              let movieIds = [movie_UserMovieId x | Entity _ x <- movieIdsTmp]
 
               -- Identify the Movies corresponding to the ID of this detail page
               let tmdbidentText = pack $ show tmdbident

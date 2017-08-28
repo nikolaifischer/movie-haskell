@@ -1,14 +1,15 @@
 <div .ui.container>
 
 
-
   <div .row>
-    <div .col-xs-12>
-      <form method=post action=@{ProfileR} enctype=#{enctype}>
+
+    <form method=post action=@{ProfileR} enctype=#{enctype}>
+      <div .searchBar .col-xs-12 .col-md-6>
         ^{widget}
+      <div .col-xs-12 .col-md-6>
         <button class="btn btn-default">
           <span class="glyphicon glyphicon-search">
-          <span .buttonText stlye="float:right;"> Search
+          <span .buttonText > Search
 
   <div .row>
     <div .col-xs-12>
@@ -20,8 +21,5 @@
       <div .col-xs-12 .col-md-4 style="padding-bottom: 10px;">
         <a href=@{DetailsR $ movieID entry}>
           <img .recommend-img .media-object src="#{(moviePosterURLs theconfig entry) !! 3}">
-
-
-
-    <p>
-      Welcome <strong><span class="username">#{show userName}</span></strong>!
+        $maybe recc <- (Maps.lookup entry movieDict)
+          <div .recommendedBy> Recommended By #{movieRecommended_by recc}

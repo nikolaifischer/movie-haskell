@@ -31,5 +31,5 @@ database:
   database:    "movie-haskell"
   connections: 10
 
-copyright: Made By FinallyBinary using Yesod and Haskell
+copyright: Made By <a href="http://www.finallybinary.com">FinallyBinary </a> using Yesod and Haskell
 #analytics: UA-YOURCODE

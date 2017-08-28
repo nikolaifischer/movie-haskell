@@ -31,7 +31,7 @@
   ^{widget}
 
 <!-- Footer -->
-<footer .footer>
+<footer .footer .myFooter>
     <div .container>
-        <p .text-muted>
-            #{appCopyright $ appSettings master}
+        <p>
+          Made By <a href="http://www.finallybinary.com">FinallyBinary </a> using Yesod and Haskell
