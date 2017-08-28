@@ -1,43 +1,38 @@
 <div .ui.container>
-  <div .row>
-    <div .col-xs-12>
-      <h1> #{movieTitle themovie}
 
   <div .row>
     <div .col-xs-12>
       $maybe msg <- mmsg
-        <div #message>#{msg}
+        <div .alert .alert-success #message>#{msg}
+
+  <div .row>
+    <div .col-xs-12>
+      <h1 .movieHeadline> #{movieTitle themovie}
 
   <div .row>
     <div .col-xs-12 .col-md-5>
       <img .detailsImage src="#{List.last (moviePosterURLs theconfig themovie)}">
     <div .col-xs-12 .col-md-7>
-      <h4> Overview
+      <h4 .detailsHeadline> Overview
       <div>#{movieOverview themovie}
-      <h4> Runtime
+      <h4 .detailsHeadline> Runtime
       <div> #{movieRunTime themovie} min
-      <h4> Release Date
+      <h4 .detailsHeadline> Release Date
       <div> #{findRelease themovie}
-
-
-  <div .row>
-    <div .col-xs-12>
+      $if isRecommended
+        <h4 .detailsHeadline> Recommended to you by
+        <div> #{ movieRecommended_by $ List.head movieobjs}
+      <hr>
+      <h4 .detailsHeadline> Recommend this Movie
       <form method=post action=@{DetailsR (movieID themovie)} enctype=#{enctype}>
         ^{widget}
         <button class="btn btn-default">
           <span class="glyphicon glyphicon-bullhorn">
           <span .buttonText> Recommend
-
+      <hr>
       $if isRecommended
+        <h4 .detailsHeadline> Already know this movie?
         <form method=post action=@{DetailsR (movieID themovie)}>
            <button class="btn btn-default" type=submit name=watchedFlag value=yes>
               <span class="glyphicon glyphicon-ok">
               <span .buttonText> Mark as Watched
-
-  <div .row>
-
-  <div .row>
-    <div .col-xs-12>
-
-  <div .row>
-    <div .col-xs-12>
