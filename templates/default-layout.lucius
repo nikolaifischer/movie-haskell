@@ -1,5 +1,5 @@
 .navbar {
-    background-color: rgb(27, 28, 29);
+    background-color:rgb(51, 51, 51);
 }
 
 .masthead {
@@ -85,7 +85,9 @@
 }
 
 .recoHeader{
-  margin-bottom: 30px;
+  margin-bottom: 60px;
+  margin-top: 50px;
+  text-align: center;
 }
 
 .recommend-img{
@@ -124,3 +126,7 @@
   color: #868686;
   margin-top: 10px;
 }
+
+  .searchCol{
+    padding-top: 25px !important;
+  }

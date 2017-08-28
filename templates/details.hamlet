@@ -20,10 +20,10 @@
       <h4 .detailsHeadline> Release Date
       <div> #{findRelease themovie}
       $if isRecommended
-        <h4 .detailsHeadline> Recommended to you by
+        <h4 .detailsHeadline> Recommended To You By
         <div> #{ movieRecommended_by $ List.head movieobjs}
       <hr>
-      <h4 .detailsHeadline> Recommend this Movie
+      <h4 .detailsHeadline> Recommend This Movie
       <form method=post action=@{DetailsR (movieID themovie)} enctype=#{enctype}>
         ^{widget}
         <button class="btn btn-default">
@@ -31,8 +31,8 @@
           <span .buttonText> Recommend
       <hr>
       $if isRecommended
-        <h4 .detailsHeadline> Already know this movie?
+        <h4 .detailsHeadline> Already Know This Movie?
         <form method=post action=@{DetailsR (movieID themovie)}>
            <button class="btn btn-default" type=submit name=watchedFlag value=yes>
               <span class="glyphicon glyphicon-ok">
-              <span .buttonText> Mark as Watched
+              <span .buttonText> Mark As Watched
