@@ -1,12 +1,7 @@
-
-
-
-
-
+---
 database:
-  user:        "movie-haskell"
-  password:    "movie-haskell"
-  host:        "localhost"
-  # See config/test-settings.yml for an override during tests
-  database:    "movie-haskell"
   connections: 10
+  database: movie-haskell
+  host: localhost
+  password: movie-haskell
+  user: movie-haskell
