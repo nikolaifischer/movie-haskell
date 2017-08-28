@@ -4,8 +4,8 @@
             <h1 .header>
                 Watch That!
             <h2>
-                Recommend movies to your friends and know what to watch
-                next.
+                Recommend Movies To Your Friends And Know What To Watch
+                Next!
             <a href="/auth/login" .btn.cfa-button.btn-lg.btn-default>
                 Sign up
 
@@ -19,19 +19,19 @@
                     <h1 #start>What is "Watch That!"?
 
                     <p>
-                        "Watch That!" is a online platform designed to help you
+                        "Watch That!" is a platform designed to help you
                         keep track of your movie recommendations.
                     <p>
                         Don't you have that one friend which always recommends movies that you might like,
-                        but you never get around to watching them. "Watch That!" helps you remember which friend
+                        but you never get around to watching them? "Watch That!" helps you remember which friend
                         recommended which movie to you.
 
                     <h1>How does it work?
                     <p>
-                      To recommend a movie to a friend (who is also registered) all you have to know is his or her E-Mail Address.
-                      You can search for any movie and than send an recommendation to your friend.
+                      To recommend a movie to a friend all you have to know is his or her E-Mail Address.
+                      You can search for any movie and than send a recommendation to your friend.
 
                     <p>
                       The movies your friends recommend to you are displayed in your account.
-                      Anytime you want to watch a good movie but don't know which, you can open up
+                      Anytime you want to enjoy a good movie but don't know which one, you can open up
                       "Watch That!" and get inspired by your friends' recommendations.

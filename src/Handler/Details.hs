@@ -19,10 +19,7 @@ successMessage :: String
 successMessage = "Your Recommendation was saved!"
 
 errorMessage :: Text
-errorMessage = "Could not find a User with this E-Mail Address"
-
-badErrorMessage :: Text
-badErrorMessage = "Oops, you found an error. Please reload the page and try again!"
+errorMessage = "The owner of this E-Mail Address does not have an account on 'Watch That!'. Why don't you invite him or her?"
 
 ----------------- GENERATING FORMS ------
 
@@ -130,7 +127,6 @@ postDetailsR tmdbident = do
 
             setMessage $ toHtml $ successMessage
 
-            print watchedButtonPressed
             redirect $ DetailsR tmdbident
 
   -- The User did not use the recommendationForm.
@@ -157,7 +153,7 @@ postDetailsR tmdbident = do
 
           -- Both Forms failed. There is something wrong here!
             _ -> do
-                setMessage $ toHtml badErrorMessage
+                setMessage $ toHtml errorMessage
                 redirect $ DetailsR tmdbident
 
 

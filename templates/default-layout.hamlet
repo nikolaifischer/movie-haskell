@@ -25,7 +25,7 @@
 <div .container>
 
     $maybe msg <- mmsg
-      <div .alert.alert-sucess #message>#{msg}
+      <div .alert.alert-success #message>#{msg}
 
 <div .mainAppContainer>
   ^{widget}

@@ -4,9 +4,9 @@
   <div .row>
 
     <form method=post action=@{ProfileR} enctype=#{enctype}>
-      <div .searchBar .col-xs-12 .col-md-6>
+      <div .searchBar .col-xs-12 .col-md-6 .col-md-offset-3>
         ^{widget}
-      <div .col-xs-12 .col-md-6>
+      <div .searchCol .col-xs-12 .col-md-2>
         <button class="btn btn-default">
           <span class="glyphicon glyphicon-search">
           <span .buttonText > Search
@@ -14,7 +14,7 @@
   <div .row>
     <div .col-xs-12>
       <h1 .recoHeader>
-        Your Recommendations
+        Recommended to you
 
   <div .row>
     $forall entry <- recommended_movies
@@ -22,4 +22,4 @@
         <a href=@{DetailsR $ movieID entry}>
           <img .recommend-img .media-object src="#{(moviePosterURLs theconfig entry) !! 3}">
         $maybe recc <- (Maps.lookup entry movieDict)
-          <div .recommendedBy> Recommended By #{movieRecommended_by recc}
+          <div .recommendedBy> Recommended by #{movieRecommended_by recc}
