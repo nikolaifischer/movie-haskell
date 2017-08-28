@@ -1,4 +1,12 @@
-database:
-  database: movie-haskell_test
 
-auth-dummy-login: true
+
+
+
+
+database:
+  user:        "movie-haskell"
+  password:    "movie-haskell"
+  host:        "localhost"
+  # See config/test-settings.yml for an override during tests
+  database:    "movie-haskell"
+  connections: 10
