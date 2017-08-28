@@ -47,6 +47,7 @@ dependencies:
 - case-insensitive
 - wai
 - themoviedb
+- hjsonpointer >= 1.2.0
 
 # The library contains all of our application code. The executable
 # defined below is just a thin wrapper.
