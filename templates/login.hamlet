@@ -1,5 +1,7 @@
 <div .login-options>
-    <h3 style="margin-bottom: 60px">Login to Watch That! with your Google Account
+    <h3 style="margin-bottom: 60px">Login to
+        <b> Watch That! 
+      with your Google Account
     <form method="get" action="@{AuthR forwardUrl}" .button >
         <input type="hidden" name="openid_identifier" value="https://www.google.com/accounts/o8/id">
         <input width="64" type="image" src="https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-64.png" value="Login via Google">

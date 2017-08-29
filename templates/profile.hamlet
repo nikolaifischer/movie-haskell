@@ -17,6 +17,9 @@
         Recommended to you
 
   <div .row>
+    $if (List.length recommended_movies) < 1
+      <div .noMoviesMessage .col-xs-12>
+        Your Recommendation List is Empty! Ask your Friends to Recommend you Something.
     $forall entry <- recommended_movies
       <div .col-xs-12 .col-md-4 style="padding-bottom: 10px;">
         <a href=@{DetailsR $ movieID entry}>

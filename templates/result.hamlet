@@ -1,4 +1,9 @@
 <div .ui.container>
+
+  <div>
+      <a href="/profile">
+        Back to Search
+
   <h1> You searched for #{show query}
 
 
