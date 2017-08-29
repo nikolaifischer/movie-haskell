@@ -26,7 +26,7 @@ data SearchQuery = SearchQuery
 -- Applicative Search Form
 searchForm :: AForm Handler SearchQuery
 searchForm = SearchQuery
-            <$> areq textField (bfs ("Search for a Movie" :: Text))  Nothing
+            <$> areq textField (bfs ("Recommend a Movie to a Friend" :: Text))  Nothing
 
 
 ----------- HTTP HANDLERS ----------------------
@@ -59,9 +59,11 @@ getProfileR = do
     -- Fetch TMDB Objects corresponding to the Movie Entities
     recommended_movies_with_duplicates <- liftIO $ mapM toTMDBMovie moviesFromDB
 
+
     let recommended_movies = removeDuplicateMovies recommended_movies_with_duplicates
 
-    let tupelList = [ (i,j) |  i <- recommended_movies , Entity _ j <- moviesFromDB] :: [ (TMDB.Movie , Import.Movie)]
+    let tupelList = [ (i,j) |  i <- recommended_movies_with_duplicates , Entity _ j <- moviesFromDB, (pack (show (movieID i))) == (movieTmdbId j)] :: [ (TMDB.Movie , Import.Movie)]
+
     let movieDict = Maps.fromList tupelList -- :: Map TMDB.Movie Import.Movie
 
 
@@ -87,7 +89,6 @@ postProfileR = do
     ((res, widget), enctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm searchForm
     case res of
       FormSuccess theQuery -> do
-              print theQuery
               redirect $ ResultR (query theQuery)
       _ -> redirect $ HomeR
 

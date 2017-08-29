@@ -24,5 +24,5 @@
       <div .col-xs-12 .col-md-4 style="padding-bottom: 10px;">
         <a href=@{DetailsR $ movieID entry}>
           <img .recommend-img .media-object src="#{(moviePosterURLs theconfig entry) !! 3}">
-        $maybe recc <- (Maps.lookup entry movieDict)
-          <div .recommendedBy> Recommended by #{movieRecommended_by recc}
+          $maybe recc <- (Maps.lookup entry movieDict)
+            <div .recommendedBy> Recommended by #{movieRecommended_by recc}
