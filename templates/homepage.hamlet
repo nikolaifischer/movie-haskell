@@ -16,7 +16,7 @@
         <div .row>
             <div .col-lg-12>
                 <div .page-header>
-                    <h1 #start>What is "Watch That!"?
+                    <h1 .homeHeadline style="text-align:center">What is "Watch That!"?
 
                     <p>
                         "Watch That!" is a platform designed to help you
@@ -26,7 +26,17 @@
                         but you never get around to watching them? "Watch That!" helps you remember which friend
                         recommended which movie to you.
 
-                    <h1>How does it work?
+              <div .row>
+                  <hr>
+                  <div .col-lg-12>
+
+                    <img .mockups src="../static/img/monitor_tablet_mockup.jpg">
+                  <hr>
+              <div .row>
+
+                  <div .col-lg-12 style="text-align:center">
+
+                    <h1 .homeHeadline>How does it work?
                     <p>
                       To recommend a movie to a friend all you have to know is his or her E-Mail Address.
                       You can search for any movie and than send a recommendation to your friend.
@@ -35,3 +45,9 @@
                       The movies your friends recommend to you are displayed in your account.
                       Anytime you want to enjoy a good movie but don't know which one, you can open up
                       "Watch That!" and get inspired by your friends' recommendations.
+
+              <div .row>
+                    <hr>
+                    <div .col-lg-12>
+                      <img .mockups src="../static/img/tablet_phone_mock.jpg">
+                    <hr>
