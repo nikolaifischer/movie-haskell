@@ -11,7 +11,7 @@
 
   <div .row>
     <div .col-xs-12 .col-md-5>
-      <img .detailsImage src="#{List.last (moviePosterURLs theconfig themovie)}">
+      <img .detailsImage src="#{(moviePosterURLs theconfig themovie) !! 4}">
     <div .col-xs-12 .col-md-7>
       <h4 .detailsHeadline> Overview
       <div>#{movieOverview themovie}

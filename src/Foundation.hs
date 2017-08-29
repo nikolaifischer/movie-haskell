@@ -245,7 +245,7 @@ instance YesodAuth App where
     -- SaveToken is important to access User Information, such as name etc.
     authPlugins app = [authGoogleEmailSaveToken clientId clientSecret]
 
-    loginHandler = lift $ defaultLayout $ [whamlet|<div style="width:500px;margin:0 auto; text-align: center; min-height:900px">^{login}|]
+    loginHandler = lift $ defaultLayout $ [whamlet|<div style="max-width:500px;margin:auto; text-align: center; min-height:900px">^{login}|]
 
     authHttpManager = getHttpManager
 

@@ -57,8 +57,9 @@ getProfileR = do
     moviesFromDB <- runDB $ selectList [MovieId <-. reccMovieIds, MovieWatched ==. False ] []
 
     -- Fetch TMDB Objects corresponding to the Movie Entities
-    recommended_movies <- liftIO $ mapM toTMDBMovie moviesFromDB
+    recommended_movies_with_duplicates <- liftIO $ mapM toTMDBMovie moviesFromDB
 
+    let recommended_movies = removeDuplicateMovies recommended_movies_with_duplicates
 
     let tupelList = [ (i,j) |  i <- recommended_movies , Entity _ j <- moviesFromDB] :: [ (TMDB.Movie , Import.Movie)]
     let movieDict = Maps.fromList tupelList -- :: Map TMDB.Movie Import.Movie
@@ -113,6 +114,15 @@ searchAndListMovies :: Text -> TheMovieDB [TMDB.Movie]
 searchAndListMovies query = do
   movies <- searchMovies query
   return movies
+
+
+
+removeDuplicateMovies :: [TMDB.Movie] -> [TMDB.Movie]
+removeDuplicateMovies = remover []
+    where remover seen [] = seen
+          remover seen (x:xs)
+              | x `List.elem` seen = remover seen xs
+              | otherwise = remover (seen List.++ [x]) xs
 
 
 
