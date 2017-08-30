@@ -1,11 +1,11 @@
 copyright: "Made By <a href=\"http://www.finallybinary.com\">FinallyBinary </a> using Yesod and Haskell"
 database:
   connections: 10
-  database: movie-haskell
-  host: ds161793.mlab.com
-  password: movie-haskell-demo
-  port: 61793
-  user: admin
+  database: _env:DATABASE_NAME:movie-haskell
+  host: _env:DATABASE_HOST:localhost
+  password: _env:DATABASE_PASSWORD:movie-haskell
+  user: _env:DATABASE_USER:movie-haskell
+  port: _env:DATABASE_PORT:27017
 host: "_env:HOST:*4"
 ip-from-header: "_env:IP_FROM_HEADER:false"
 port: "_env:PORT:8080"
