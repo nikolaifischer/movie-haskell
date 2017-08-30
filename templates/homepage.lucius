@@ -7,10 +7,6 @@ li {
     font-size: 16px
 }
 
-##{commentTextareaId} {
-    width: 400px;
-    height: 100px;
-}
 
 .cfa-button{
   background-color: transparent !important;
