@@ -7,11 +7,9 @@ module Handler.Profile where
 
 import           Import
 import           Network.API.TheMovieDB  as TMDB
-import           Yesod.Auth.GoogleEmail2
 import           Yesod.Form.Bootstrap3
 import           Text.Read
 import Data.List as List
-import           System.IO.Unsafe
 import Data.Map as Maps
 
 
@@ -19,9 +17,8 @@ import Data.Map as Maps
 
 -- This datatype serves no other purpose than wrapping a search-query
 -- in the searchForm
-data SearchQuery = SearchQuery
-          {query :: Text}
-           deriving Show
+newtype SearchQuery = SearchQuery{query :: Text}
+                     deriving Show
 
 -- Applicative Search Form
 searchForm :: AForm Handler SearchQuery
@@ -32,26 +29,16 @@ searchForm = SearchQuery
 ----------- HTTP HANDLERS ----------------------
 getProfileR :: Handler Html
 getProfileR = do
-    token <- getUserAccessToken
-    -- TODO: Fehlerbehandlung bei Nothing. Exception?
-    -- GET USER NAME FROM TOKEN
-    let Just (justToken) = token
-    manager <- newManager
-    person <- getPerson manager justToken
-    let Just(justPerson) = person
-    let userName = case (personDisplayName justPerson) of
-                    Nothing   -> "User"
-                    Just name -> name
 
     -- GET RECOMMONDATIONS FROM DB
     maid <- maybeAuthId
-    let Just(usid) = maid
+    let Just usid = maid
 
     -- TMDB-Ids for this user's recommendation are now stored here
     movieRelationEntities <-  runDB $ selectList [Movie_UserUserId ==. usid] []
 
     -- List Comprehension to extract the IDs from the collected Movie_Entites
-    let reccMovieIds = [movie_UserMovieId x | Entity someId x <- movieRelationEntities]
+    let reccMovieIds = [movie_UserMovieId x | Entity _ x <- movieRelationEntities]
 
     -- Fetch the Movie Entities for the extracted IDs
     moviesFromDB <- runDB $ selectList [MovieId <-. reccMovieIds, MovieWatched ==. False ] []
@@ -62,14 +49,14 @@ getProfileR = do
 
     let recommended_movies = removeDuplicateMovies recommended_movies_with_duplicates
 
-    let tupelList = [ (i,j) |  i <- recommended_movies_with_duplicates , Entity _ j <- moviesFromDB, (pack (show (movieID i))) == (movieTmdbId j)] :: [ (TMDB.Movie , Import.Movie)]
+    let tupelList = [ (i,j) |  i <- recommended_movies_with_duplicates , Entity _ j <- moviesFromDB,  pack (show (movieID i)) == movieTmdbId j] :: [ (TMDB.Movie , Import.Movie)]
 
     let movieDict = Maps.fromList tupelList -- :: Map TMDB.Movie Import.Movie
 
 
     -- Load TMDB Config to construct Image-URLS:
     eitherConfig <- liftIO $ runTheMovieDB key config
-    let Right(theconfig) = eitherConfig
+    let Right theconfig = eitherConfig
 
 
     -- Render the Search Form
@@ -86,11 +73,10 @@ getProfileR = do
 -- The real searching on TMDB is done by the result Handler. (see Result.hs)
 postProfileR :: Handler Html
 postProfileR = do
-    ((res, widget), enctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm searchForm
+    ((res, _), _) <- runFormPost $ renderBootstrap3 BootstrapBasicForm searchForm
     case res of
-      FormSuccess theQuery -> do
-              redirect $ ResultR (query theQuery)
-      _ -> redirect $ HomeR
+      FormSuccess theQuery -> redirect $ ResultR (query theQuery)
+      _ -> redirect HomeR
 
 
 
@@ -110,14 +96,6 @@ toTMDBMovie x = do
           return val
 
 
--- | Search for movies with a query string.
-searchAndListMovies :: Text -> TheMovieDB [TMDB.Movie]
-searchAndListMovies query = do
-  movies <- searchMovies query
-  return movies
-
-
-
 removeDuplicateMovies :: [TMDB.Movie] -> [TMDB.Movie]
 removeDuplicateMovies = remover []
     where remover seen [] = seen
@@ -126,6 +104,6 @@ removeDuplicateMovies = remover []
               | otherwise = remover (seen List.++ [x]) xs
 
 
-
+-- This instance is needed to construct dictionaries for the movie objects
 instance Ord TMDB.Movie where
-  movie1 `compare` movie2 = (movieID movie1) `compare` (movieID movie2)
+  movie1 `compare` movie2 =  movieID movie1 `compare` movieID movie2
