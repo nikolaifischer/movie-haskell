@@ -12,10 +12,6 @@ import Import.NoFoundation
 import Text.Hamlet                 (hamletFile)
 import Text.Jasmine                (minifym)
 
--- Used only when in "auth-dummy-login" setting is enabled.
-import Yesod.Auth.Dummy
-
-import Yesod.Auth.OpenId           (authOpenId, IdentifierType (Claimed))
 import Yesod.Core.Types            (Logger)
 import Yesod.Default.Util          (addStaticContentExternal)
 import qualified Yesod.Core.Unsafe as Unsafe
@@ -23,7 +19,6 @@ import qualified Data.CaseInsensitive as CI
 import qualified Data.Text.Encoding as TE
 
 -- Google Authentication --
-import           Yesod.Auth
 import           Yesod.Auth.GoogleEmail2
 clientId :: Text
 clientId = "444529797047-mcgg3g2attndj883ik6v506r9p5cis63.apps.googleusercontent.com"
@@ -58,15 +53,7 @@ data MenuTypes
     = NavbarLeft MenuItem
     | NavbarRight MenuItem
 
--- This is where we define all of the routes in our application. For a full
--- explanation of the syntax, please see:
--- http://www.yesodweb.com/book/routing-and-handlers
---
--- Note that this is really half the story; in Application.hs, mkYesodDispatch
--- generates the rest of the code. Please see the following documentation
--- for an explanation for this split:
--- http://www.yesodweb.com/book/scaffolding-and-the-site-template#scaffolding-and-the-site-template_foundation_and_application_modules
---
+
 -- This function also generates the following type synonyms:
 -- type Handler = HandlerT App IO
 -- type Widget = WidgetT App IO ()
@@ -106,9 +93,6 @@ instance Yesod App where
 
         muser <- maybeAuthId
         mcurrentRoute <- getCurrentRoute
-
-        -- Get the breadcrumbs, as defined in the YesodBreadcrumbs instance.
-        (title, parents) <- breadcrumbs
 
         -- Define the menu items of the header.
         let menuItems =
@@ -216,10 +200,10 @@ instance YesodPersist App where
             (appConnPool master)
 
 
+-- This is a widget which overrides the default login screen by yesod
 login :: Widget
-login = do
-    master <- getYesod
-    toWidget $(widgetFile "login")
+login = toWidget $(widgetFile "login")
+
 instance YesodAuth App where
     type AuthId App = UserId
 
@@ -244,6 +228,7 @@ instance YesodAuth App where
     -- SaveToken is important to access User Information, such as name etc.
     authPlugins app = [authGoogleEmailSaveToken clientId clientSecret]
 
+    -- This defines the container for the custom login screen widget ("login")
     loginHandler = lift $ defaultLayout $ [whamlet|<div style="max-width:500px;margin:auto; text-align: center; min-height:900px">^{login}|]
 
     authHttpManager = getHttpManager
@@ -272,11 +257,3 @@ instance HasHttpManager App where
 
 unsafeHandler :: App -> Handler a -> IO a
 unsafeHandler = Unsafe.fakeHandlerGetLogger appLogger
-
--- Note: Some functionality previously present in the scaffolding has been
--- moved to documentation in the Wiki. Following are some hopefully helpful
--- links:
---
--- https://github.com/yesodweb/yesod/wiki/Sending-email
--- https://github.com/yesodweb/yesod/wiki/Serve-static-files-from-a-separate-domain
--- https://github.com/yesodweb/yesod/wiki/i18n-messages-in-the-scaffolding
