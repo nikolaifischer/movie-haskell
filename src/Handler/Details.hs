@@ -21,7 +21,7 @@ successMessage = "Your Recommendation was saved!"
 errorMessage :: Text
 errorMessage = "The owner of this E-Mail Address does not have an account on 'Watch That!'. Why don't you invite him or her?"
 
------------------ GENERATING FORMS ------
+----------------- GENERATING FORM ------
 
 -- This datatype serves no other purpose than wrapping a reccomendation-query
 -- in the recommendationForm
@@ -42,15 +42,14 @@ recommendationForm  = UserQuery
                 Nothing  -> Left ("This User does not have an Account on this platform" :: Text)
                 (Just _ ) -> Right input
 
+-----------------------
 
+---------GET HANDLER--------------
 getDetailsR :: Int -> Handler Html
 getDetailsR theID = do
 
-
     maid <- maybeAuthId
     let Just usid = maid
-
-
 
     -- Load TMDB Config to construct Image-URLS:
     eitherConfig <- liftIO $ runTheMovieDB key config
@@ -62,9 +61,7 @@ getDetailsR theID = do
                 Left _        -> error "Movie not found in DB"
                 Right something -> something
 
-
-
-    mmsg <- getMessage -- Brauch ich das überhaupt noch?
+    mmsg <- getMessage
 
     -- Checks if the movie for this details page was
     -- recommended to the current User
@@ -83,8 +80,6 @@ getDetailsR theID = do
 
     ----------------------------------------
 
-
-
     -- Render Form and Page
     (widget, enctype) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm recommendationForm
     defaultLayout $ do
@@ -92,7 +87,7 @@ getDetailsR theID = do
         $(widgetFile "details")
 
 
-
+------ POST HANDLER -------
 postDetailsR :: ItemID -> Handler Html
 postDetailsR tmdbident = do
   ((res, _), _) <- runFormPost $ renderBootstrap3 BootstrapBasicForm recommendationForm
@@ -149,7 +144,7 @@ postDetailsR tmdbident = do
 
               redirect ProfileR
 
-          -- Both Forms failed. There is something wrong here!
+          -- Both Forms failed. The E-Mail which was input by the user is not in the DB.
             _ -> do
                 setMessage $ toHtml errorMessage
                 redirect $ DetailsR tmdbident
