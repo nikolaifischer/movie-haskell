@@ -80,13 +80,3 @@ library:
           - "-fwarn-tabs"
           - "-O0"
 name: movie-haskell
-tests:
-  test:
-    dependencies:
-      - movie-haskell
-      - "hspec >=2.0.0"
-      - yesod-test
-    ghc-options: "-Wall"
-    main: Spec.hs
-    source-dirs: test
-version: "0.0.0"
