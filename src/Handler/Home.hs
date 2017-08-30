@@ -28,9 +28,7 @@ getHomeR = do
     let submission = Nothing :: Maybe FileForm
         handlerName = "getHomeR" :: Text
     defaultLayout $ do
-        let (commentFormId, commentTextareaId, commentListId) = commentIds
         aDomId <- newIdent
-        setTitle "Welcome To Yesod!"
         $(widgetFile "homepage")
 
 postHomeR :: Handler Html
@@ -42,7 +40,6 @@ postHomeR = do
             _ -> Nothing
 
     defaultLayout $ do
-        let (commentFormId, commentTextareaId, commentListId) = commentIds
         aDomId <- newIdent
         setTitle "Welcome To Yesod!"
         $(widgetFile "homepage")
@@ -62,6 +59,3 @@ sampleForm = renderBootstrap3 BootstrapBasicForm $ FileForm
                 , ("placeholder", "File description")
                 ]
             }
-
-commentIds :: (Text, Text, Text)
-commentIds = ("js-commentForm", "js-createCommentTextarea", "js-commentList")
