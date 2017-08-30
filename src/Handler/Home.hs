@@ -8,7 +8,7 @@ module Handler.Home where
 import Import
 
 getHomeR :: Handler Html
-getHomeR = do
+getHomeR =
     defaultLayout $ do
         aDomId <- newIdent
         $(widgetFile "homepage")
