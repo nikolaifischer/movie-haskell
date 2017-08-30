@@ -6,7 +6,7 @@
 {-# LANGUAGE QuasiQuotes           #-}
 module Handler.Details where
 
-import           Data.List               as List
+import           Data.List  as List
 import           Data.Time.Calendar      as Calendar
 import           Import
 import           Network.API.TheMovieDB  as TMDB
@@ -25,9 +25,8 @@ errorMessage = "The owner of this E-Mail Address does not have an account on 'Wa
 
 -- This datatype serves no other purpose than wrapping a reccomendation-query
 -- in the recommendationForm
-data UserQuery = UserQuery
-          {email :: Text}
-           deriving Show
+newtype UserQuery = UserQuery{email :: Text}
+                   deriving Show
 
 -- Applicative Form for Recommendations
 recommendationForm ::  AForm Handler UserQuery
@@ -72,7 +71,7 @@ getDetailsR theID = do
     -- If it was, a "Mark as Watched" button is displayed
     --------------------------------------
     -- Identify all Movie Objects corresponding to the current TMDB ID
-    movieEntities <- runDB $ selectList [MovieTmdbId ==. (pack $ show theID), MovieWatched ==. False] []
+    movieEntities <- runDB $ selectList [ MovieTmdbId ==. pack (show theID), MovieWatched ==. False] []
     let movieIds = [someId | Entity someId _ <- movieEntities]
     let movieobjs = [obj | Entity _ obj <- movieEntities]
 
@@ -80,7 +79,8 @@ getDetailsR theID = do
     -- in the Movie - User DB Table.
     hits <- runDB $ selectList [Movie_UserMovieId <-. movieIds, Movie_UserUserId ==. usid] []
     -- Set the Flag accordingly
-    let isRecommended = (List.length hits) > 0
+    let isRecommended =  not (List.null hits)  -- means the same as  length hits > 0
+
     ----------------------------------------
 
 
@@ -111,13 +111,11 @@ postDetailsR tmdbident = do
             token <- getUserAccessToken
             -- TODO: Fehlerbehandlung bei Nothing. Exception?
             -- GET USER NAME FROM TOKEN
-            let Just (justToken) = token
+            let Just justToken = token
             manager <- newManager
             person <- getPerson manager justToken
-            let Just(justPerson) = person
-            let userName = case (personDisplayName justPerson) of
-                            Nothing   -> "User"
-                            Just name -> name
+            let Just justPerson = person
+            let userName = fromMaybe "User" (personDisplayName justPerson)
 
             -- Insert a new Movie Entity in the DB:
             themovieId <-  runDB $ Import.insert $ Import.Movie (pack (show tmdbident)) False userName
@@ -125,7 +123,7 @@ postDetailsR tmdbident = do
             let entity = Movie_User user themovieId
             _ <- runDB $ Import.insert entity
 
-            setMessage $ toHtml $ successMessage
+            setMessage $ toHtml successMessage
 
             redirect $ DetailsR tmdbident
 
@@ -149,21 +147,12 @@ postDetailsR tmdbident = do
               -- Set the watched flag for all of these movies to "True"
               _ <- runDB $ updateWhere [MovieTmdbId ==. tmdbidentText, MovieId <-. movieIds] [MovieWatched =. True]
 
-              redirect $ ProfileR
+              redirect ProfileR
 
           -- Both Forms failed. There is something wrong here!
             _ -> do
                 setMessage $ toHtml errorMessage
                 redirect $ DetailsR tmdbident
-
-
--- | Search for movies with a query string.
-searchAndListMovies :: Text -> TheMovieDB [TMDB.Movie]
-searchAndListMovies query = do
-  movies <- searchMovies query
-  return movies
-
-  --liftIO $ mapM_ printMovieHeader movies
 
 
 -- Small Helper function to return the release date of a movie as a String
@@ -172,4 +161,4 @@ findRelease :: TMDB.Movie -> String
 findRelease movie = thedate where
   thedate = case movieReleaseDate movie of
             Nothing     -> "Not Released"
-            Just (date) -> Calendar.showGregorian date
+            Just date -> Calendar.showGregorian date
