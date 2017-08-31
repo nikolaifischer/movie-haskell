@@ -14,6 +14,9 @@ The movies your friends recommend to you are displayed in your account. Anytime 
 "Watch That!" is written in Haskell using the Yesod Framework. As a Database it uses MongoDB.
 
 ### Install
+* Prerequisites:
+  * [MongoDB](https://www.mongodb.com/)
+  * [Haskell Tool Stack](https://docs.haskellstack.org/en/stable/README/)
 * Download or clone the project
 * Start a MongoDB Server on your Machine on Port 27017.
     * Note: DB Settings can be overwritten using ENV-Variables:
