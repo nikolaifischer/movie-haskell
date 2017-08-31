@@ -49,7 +49,7 @@ getDetailsR :: Int -> Handler Html
 getDetailsR theID = do
 
     maid <- maybeAuthId
-    let Just usid = maid
+    let  usid = fromMaybe (error "Token Error") maid
 
     -- Load TMDB Config to construct Image-URLS:
     eitherConfig <- liftIO $ runTheMovieDB key config
@@ -106,10 +106,10 @@ postDetailsR tmdbident = do
             token <- getUserAccessToken
             -- TODO: Fehlerbehandlung bei Nothing. Exception?
             -- GET USER NAME FROM TOKEN
-            let Just justToken = token
+            let justToken = fromMaybe (error "Token Error") token
             manager <- newManager
             person <- getPerson manager justToken
-            let Just justPerson = person
+            let justPerson = fromMaybe (error "Google Authentication Error") person
             let userName = fromMaybe "User" (personDisplayName justPerson)
 
             -- Insert a new Movie Entity in the DB:
@@ -131,7 +131,7 @@ postDetailsR tmdbident = do
 
               --  Identify the current user
               maid <- maybeAuthId
-              let Just loggedInId = maid
+              let loggedInId = fromMaybe (error "Token Error") maid
 
               -- Get the movies belonging to this user
               movieIdsTmp <- runDB $ selectList [Movie_UserUserId ==. loggedInId] []
