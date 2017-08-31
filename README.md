@@ -1,6 +1,6 @@
 # Watch That! (movie-haskell)
 
-![Screenshot](https://pasteboard.co/GIcEAZw.jpg)
+![Screenshot](https://raw.githubusercontent.com/nikolaifischer/movie-haskell/master/static/img/monitor_tablet_mockup.jpg)
 
 ### What is "Watch That"?
 "Watch That!" is a platform designed to help you keep track of your movie recommendations.
