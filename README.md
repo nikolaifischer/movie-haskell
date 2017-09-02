@@ -19,7 +19,7 @@ The movies your friends recommend to you are displayed in your account. Anytime 
   * [Haskell Tool Stack](https://docs.haskellstack.org/en/stable/README/)
 * Download or clone the project
 * Start a MongoDB Server on your Machine on Port 27017.
-    * Note: DB Settings can be overwritten using ENV-Variables:
+    * Note: DB Settings can be overwritten using Environment-Variables:
     * DATABASE_HOST
     * DATABASE_PORT
     * DATABASE_PASSWORD
@@ -29,6 +29,8 @@ The movies your friends recommend to you are displayed in your account. Anytime 
     * stack setup
     * stack install --only-dependencies
     * stack install
-    * Run the built movie-haskell.exe located in the .stack-work folder
-    * OR
-    * run stack exec -- yesod devel    for a development build
+    * Start the app:
+      * Copy the built movie-haskell.exe located in the .stack-work/install/.../bin folder to the root of the project
+      * Run movie-haskell.exe as root/administrator
+    * OR Start in Development Mode
+      * run stack exec -- yesod devel (yesod command line tool is needed)
