@@ -21,15 +21,15 @@ import qualified Data.Text.Encoding as TE
 -- Google Authentication --
 import           Yesod.Auth.GoogleEmail2
 clientId :: Text
-clientId = "444529797047-mcgg3g2attndj883ik6v506r9p5cis63.apps.googleusercontent.com"
+clientId = "ENTER YOUR GOOGLE CLIENT ID"
 
 clientSecret :: Text
-clientSecret = "RjzSsKSeP2nWBWEqb-gT9i3d"
+clientSecret = "ENTER YOUR GOOGLE CLIENT SECRET"
 
 
 -- The Movie DB API Key --
 key :: Text
-key = pack "4a89df180a9d04aad3f5d0463968a68d"
+key = pack "ENTER YOUR MOVIE DB API KEY"
 
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application

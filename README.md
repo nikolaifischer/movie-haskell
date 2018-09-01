@@ -18,6 +18,25 @@ The movies your friends recommend to you are displayed in your account. Anytime 
   * [MongoDB](https://www.mongodb.com/)
   * [Haskell Tool Stack](https://docs.haskellstack.org/en/stable/README/)
 * Download or clone the project
+* Create and enter a Google API key:
+  * Visit https://console.cloud.google.com
+  * Add a new Project and select it
+  * Search for the Google+ API and enable it
+  * Click on API & Services -> Credentials
+  * Click Create Credentials
+  * Pick "OAuth Client ID"
+  * Pick "Web Application"
+  * Enter an arbitray name an leave the restricitons empty
+  * Open the file Foundation.hs of this project
+  * Input the Client ID in the "clientID" variable and the client secret in the "clientSecret" variable
+
+* Create an The Movie DB API key:
+  * Visit https://www.themoviedb.org
+  * Create a free account
+  * Open your account page and click on "Settings"
+  * Select "API" and follow the instructions to create an API key
+  * Copy your API key and paste it in the file Foundation.hs in the variable called "key"
+
 * Start a MongoDB Server on your Machine on Port 27017.
     * Note: DB Settings can be overwritten using Environment-Variables:
     * DATABASE_HOST
