@@ -30,7 +30,7 @@ More screenshots of the app can be found here: [Imgur](https://imgur.com/a/fOXbE
   * Click Create Credentials
   * Pick "OAuth Client ID"
   * Pick "Web Application"
-  * Enter an arbitray name
+  * Enter an arbitrary name
   * Add http://localhost:3000 to authorised JavaScript origins
   * Add http://localhost:3000/auth/page/googleemail2/complete to authorised redirect URIs
   * Open the file Foundation.hs of this project
